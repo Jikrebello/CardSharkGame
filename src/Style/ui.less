@@ -1,0 +1,59 @@
+// out: false
+@import "common/common.less";
+
+html,
+body,
+canvas {
+    .Size100();
+    .Margin0();
+    .FontTextField();
+    -webkit-tap-highlight-color: transparent;
+}
+
+#gameContainer {
+    .Size100();
+    position: relative;
+}
+
+#gameContainer>div {
+    position: relative;
+}
+
+canvas {
+    display: block;
+    outline: none;
+}
+
+#ui {
+    .Size100();
+    .Position0();
+    position: absolute !important;
+    pointer-events: none;
+
+    .screen {
+        container-type: inline-size;
+        .Size100();
+
+        &>div {
+            .Size100();
+            padding: 5px;
+            user-select: none;
+            box-sizing: border-box;
+            pointer-events: all;
+            overflow: auto;
+
+            #header {
+                color: white;
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+            }
+
+            .tiny {
+                font-size: 10px;
+            }
+        }
+    }
+}
