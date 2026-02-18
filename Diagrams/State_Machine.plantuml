@@ -1,0 +1,64 @@
+@startuml State Machine
+title High-Level State Machine
+
+[*] --> MainMenu
+MainMenu --> Playing : Start
+
+state Playing {
+  [*] --> TurnSetup
+
+  TurnSetup --> AwaitInput : shuffle & reveal
+
+  AwaitInput --> BankResolve : BANK (if allowed)
+  AwaitInput --> FlipResolve : FLIP L/R
+
+  BankResolve --> TurnSetup : Safe Run Reset
+
+  state FlipResolve {
+    [*] --> FlipChoice
+    FlipChoice --> BombHit : bomb
+    FlipChoice --> TreasureHit : treasure
+
+    state BombHit {
+      [*] --> CheckShield
+      CheckShield --> ShieldSave : shield active
+      CheckShield --> LoseLife : no shield
+    }
+
+    state TreasureHit {
+      [*] --> LootDraw
+      LootDraw --> JokerResolve : joker
+      LootDraw --> NumberResolve : number
+
+      state NumberResolve {
+        [*] --> CheckDuplicate
+        CheckDuplicate --> NewNumber : not in runUniques
+        CheckDuplicate --> Duplicate : already in set
+
+        state Duplicate {
+          [*] --> HandleDuplicate
+          HandleDuplicate --> ShieldSave2 : shield active
+          HandleDuplicate --> ScrambleReroll : scramblerCharges>0
+          HandleDuplicate --> RunBust : otherwise
+        }
+      }
+    }
+  }
+
+  ' Transitions from bomb substates
+  ShieldSave --> TurnSetup : streak=0, continue run
+  LoseLife --> GameOver : lives==0
+  LoseLife --> TurnSetup : lives>0, Run Reset
+
+  ' Transitions from treasure substates
+  JokerResolve --> TurnSetup : apply joker effect
+  NewNumber --> TurnSetup : add to runUniques
+
+  ShieldSave2 --> TurnSetup : consume shield, continue
+  ScrambleReroll --> TurnSetup : reroll (add or bust)
+  RunBust --> TurnSetup : Run Reset (no life loss)
+}
+
+GameOver --> MainMenu : Restart
+
+@enduml

@@ -1,6 +1,6 @@
+import "../../../Style/ui.less";
 import { createScene } from "../../game";
-import '../../../Style/ui.less'
 
-document.addEventListener("DOMContentLoaded", function(event) { 
-    createScene(true);
+document.addEventListener("DOMContentLoaded", function (event) {
+  createScene(true);
 });
