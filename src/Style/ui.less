@@ -1,6 +1,17 @@
 // out: false
 @import "common/common.less";
 
+:root {
+  --panel: rgba(10, 14, 18, 0.55);
+  --panel-strong: rgba(10, 14, 18, 0.78);
+  --stroke: rgba(255, 255, 255, 0.12);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.7);
+  --good: rgba(80, 255, 170, 0.9);
+  --bad: rgba(255, 90, 90, 0.9);
+  --warn: rgba(255, 210, 90, 0.95);
+}
+
 html,
 body,
 canvas {
@@ -30,30 +41,366 @@ canvas {
   position: absolute !important;
   pointer-events: none;
 
+  font-family:
+    "Novus",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+  color: var(--text);
+
   .screen {
     container-type: inline-size;
     .Size100();
+    pointer-events: all;
+    user-select: none;
+    box-sizing: border-box;
+  }
+}
 
-    & > div {
-      .Size100();
-      padding: 5px;
-      user-select: none;
-      box-sizing: border-box;
-      pointer-events: all;
-      overflow: auto;
+/* -----------------------------
+   Fonts
+------------------------------ */
+@font-face {
+  font-family: "Novus";
+  src: url("../Fonts/Novus-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Novus";
+  src: url("../Fonts/Novus-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Novus";
+  src: url("../Fonts/Novus-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
-      #header {
-        color: white;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000;
-      }
+/* -----------------------------
+   Game Screen Layout
+------------------------------ */
+#gameScreen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  overflow: hidden;
+}
 
-      .tiny {
-        font-size: 10px;
-      }
+/* HUD */
+#hud {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 10px 12px;
+  backdrop-filter: blur(8px);
+
+  .hud-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: stretch;
+
+    & + .hud-row {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--stroke);
     }
+  }
+
+  .hud-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 8px 10px;
+    min-width: 90px;
+    flex: 0 0 auto;
+
+    &.wide {
+      flex: 1 1 320px;
+      min-width: 240px;
+    }
+  }
+
+  .hud-label {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+
+  .hud-value {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+}
+
+.uniques {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+
+  .unique-slot {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.18);
+    color: var(--muted);
+    user-select: none;
+
+    &.filled {
+      background: rgba(80, 255, 170, 0.16);
+      border-color: rgba(80, 255, 170, 0.3);
+      color: var(--text);
+    }
+  }
+}
+
+/* Message bar */
+#messageBar {
+  background: var(--panel-strong);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 10px 12px;
+  backdrop-filter: blur(8px);
+
+  #messageTitle {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  #messageBody {
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--muted);
+  }
+}
+
+/* -----------------------------
+   Card Area + Flip Animation
+------------------------------ */
+#cardArea {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 3cqw, 18px);
+  align-items: center;
+  justify-items: center;
+  perspective: 1000px;
+  /* keep cards from growing too huge on ultra-wide */
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 220ms ease;
+}
+
+.card.revealed .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* The button is the card container */
+.card {
+  pointer-events: all;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: min(42cqw, 360px);
+  aspect-ratio: 2 / 3;
+  position: relative;
+
+  /* required for 3D flip */
+  transform-style: preserve-3d;
+
+  transition:
+    transform 220ms ease,
+    filter 220ms ease;
+
+  outline: none;
+
+  /* allow keyboard focus styling */
+  &:focus-visible {
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.22));
+  }
+
+  /* hover lift ONLY when not revealed (prevents overriding rotateY) */
+  &:not(.revealed):hover {
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+    filter: grayscale(0.2);
+  }
+
+  /* glow layer */
+  .card-glow {
+    position: absolute;
+    inset: -10px;
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  /* the two faces */
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    backface-visibility: hidden;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .card-back {
+    background-image: url("../Textures/Card/backCard.webp");
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* front is rotated so it becomes visible when the card flips */
+  .card-front {
+    transform: rotateY(180deg);
+    background-image: none; /* set by .treasure/.bomb class */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* selected glow */
+  &.selected .card-glow {
+    opacity: 1;
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.22);
+  }
+
+  /* outcome glow */
+  &.win .card-glow {
+    opacity: 1;
+    box-shadow: 0 0 34px var(--good);
+  }
+
+  &.lose .card-glow {
+    opacity: 1;
+    box-shadow: 0 0 34px var(--bad);
+  }
+}
+
+/* Front face variants */
+.card.treasure .card-front {
+  background-image: url("../Textures/Card/treasureCard.webp");
+}
+.card.bomb .card-front {
+  background-image: url("../Textures/Card/bombCard.webp");
+}
+
+/* -----------------------------
+   Controls + Overlay
+------------------------------ */
+#controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  pointer-events: all;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  font-family: inherit;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    opacity 160ms ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.14);
+  }
+  &:active {
+    transform: translateY(0px);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &.secondary {
+    background: rgba(0, 0, 0, 0.18);
+  }
+}
+
+.overlay {
+  pointer-events: all;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.modal {
+  width: min(520px, 92vw);
+  background: rgba(12, 16, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  padding: 18px;
+
+  h2 {
+    margin: 0 0 8px 0;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0 0 14px 0;
+    color: var(--muted);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
   }
 }

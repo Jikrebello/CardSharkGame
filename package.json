@@ -8,6 +8,7 @@
         "build": "webpack --config ./config/webpack.config.dev.js"
     },
     "dependencies": {
+        "@babylonjs/inspector": "^8.51.2",
         "babylonjs": "^7.12.0",
         "babylonjs-loaders": "^7.12.0",
         "babylonjs-materials": "^7.12.0"

@@ -4,11 +4,11 @@ const { merge } = require("webpack-merge");
 module.exports = (env) => {
   return merge(common, {
     mode: "development",
-    devtool: "eval",
+    devtool: "eval-source-map",
     output: {
       publicPath: env.WEBPACK_SERVE ? "/" : "./",
     },
-    entry: [`./src/Script/base/appStart/localdev.ts`, "./src/Script/game.ts"],
+    entry: [`./src/Script/base/appStart/localdev.ts`],
     devServer: {
       host: "localhost",
       port: 10001, // port that we're using for local host (localhost:10001)

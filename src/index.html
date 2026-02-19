@@ -15,131 +15,103 @@
       <canvas id="canvas" touch-action="none"></canvas>
       <div id="ui">
         <div id="gameScreen" class="screen">
-          <div>
-            <h2 id="header">Hello and welcome!</h2>
-            <p>
-              Your quest, should you choose to accept it, is to create a
-              <span class="tiny">teensy tiny</span> game. In the game you are
-              presented with 2 cards, on the back of one is a treasure while the
-              other has a bomb. You need to guess the correct one to win. When
-              you win, you can ceremoniously show off the trophy 3d model
-              (mesh).
-            </p>
-            <h2>How to split it up</h2>
-            <ul>
-              <li>
-                Please create the cards and the card selection as part of your
-                UI (html) interface. The assets for the front and backs of the
-                cards are in "/Textures/Card/", the selection buttons can be
-                made any way you like.
-              </li>
-              <li>
-                Please show the 3d trophy in the game engine. The model can be
-                found at "Models/Trophy.glb", the texture can be found at
-                "/Textures/Trophy.webp".
-              </li>
-            </ul>
-            <h2>Main objectives</h2>
-            <ul>
-              <li>Have a working game.</li>
-              <li>
-                Create a beautiful and responsive interface to select your
-                answer.
-              </li>
-              <li>Randomize the position of the winning and losing cards.</li>
-              <li>Create a cool sequence to reveal your selection.</li>
-              <li>
-                Create an on screen counter to show you how many correct guesses
-                you have in a row.
-              </li>
-              <li>Show the celebratory trophy.</li>
-              <li>
-                Delete the "node_modules" folder, zip everything up and send it
-                back to us.
-              </li>
-            </ul>
-            <h2>Side quests</h2>
-            <ul>
-              <li>Add some sound.</li>
-              <li>You can modify any textures if you'd like.</li>
-              <li>
-                You can look into the different texture types and apply them to
-                the trophy.
-              </li>
-              <li>
-                You can create a PBR material instead of standard material to
-                make the trophy appear more realistic.
-              </li>
-              <li>
-                You can look into adding
-                <a
-                  target="_blank"
-                  href="https://doc.babylonjs.com/features/featuresDeepDive/particles/particle_system/particle_system_intro"
-                  >particles</a
-                >
-                for the win animation.
-              </li>
-              <li>
-                Babylonjs has tons of built-in effects to play around with.
-              </li>
-              <li>Whatever you think could be cool.</li>
-            </ul>
-            <h2>Resources</h2>
-            <ul>
-              <li>
-                You can find the Babylon.js docs over
-                <a target="_blank" href="https://doc.babylonjs.com/">HERE.</a>
-              </li>
-              <li>
-                You can find the LESS css (The css preprocessor we use) docs
-                over
-                <a target="_blank" href="https://lesscss.org/functions/"
-                  >HERE.</a
-                >
-              </li>
-            </ul>
-            <h2>Hints</h2>
-            <ul>
-              <li>
-                Have a good read through game.ts, this is where the game engine
-                gets initialized. Look especially at the comments as there are
-                some useful example and debug functions. Remember that you can
-                also still use console.log like you usually would in any js
-                application.
-              </li>
-              <li>
-                The main stylesheet is "ui.less", it also imports from
-                "common.less". LESS looks almost identical to CSS, but has some
-                special built-in features. Feel free to create more stylesheets
-                if you need, but please have import them into ui.less
-              </li>
-              <li>
-                You can look at how to load meshes
-                <a
-                  target="_blank"
-                  href="https://doc.babylonjs.com/features/featuresDeepDive/importers/loadingFileTypes#sceneloaderimportmesh"
-                  >HERE.</a
-                >
-              </li>
-              <li>
-                The trophy mesh has been specifically exported to not have a
-                material yet, and you have to apply the texture to the material
-                and the material to the mesh. Check out
-                <a
-                  target="_blank"
-                  href="https://doc.babylonjs.com/features/featuresDeepDive/materials/using/materials_introduction#texture"
-                  >THIS</a
-                >
-                link to find out how to make materials and apply textures. We
-                only supplied a diffuse texture. You don't have to worry about
-                the different types of textures right now.
-              </li>
-              <li>
-                If the texture on the trophy is looking warped or glitchy, when
-                importing it try setting "InvertY" to false.
-              </li>
-            </ul>
-            <p>Good luck and have fun!</p>
+          <div id="hud">
+            <div class="hud-row">
+              <div class="hud-item">
+                <div class="hud-label">Lives</div>
+                <div id="hudLives" class="hud-value">3</div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Turns</div>
+                <div id="hudTurns" class="hud-value">40</div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Streak</div>
+                <div id="hudStreak" class="hud-value">0</div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Total</div>
+                <div id="hudTotalScore" class="hud-value">0</div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Trophy</div>
+                <div id="hudTrophyTier" class="hud-value">None</div>
+              </div>
+            </div>
+
+            <div class="hud-row">
+              <div class="hud-item wide">
+                <div class="hud-label">Run Uniques (1–7)</div>
+                <div id="hudUniques" class="uniques">
+                  <span class="unique-slot" data-n="1">1</span>
+                  <span class="unique-slot" data-n="2">2</span>
+                  <span class="unique-slot" data-n="3">3</span>
+                  <span class="unique-slot" data-n="4">4</span>
+                  <span class="unique-slot" data-n="5">5</span>
+                  <span class="unique-slot" data-n="6">6</span>
+                  <span class="unique-slot" data-n="7">7</span>
+                </div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Shield</div>
+                <div id="hudShield" class="hud-value">Off</div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Scrambler</div>
+                <div id="hudScrambler" class="hud-value">0</div>
+              </div>
+
+              <div class="hud-item">
+                <div class="hud-label">Jammer</div>
+                <div id="hudJammer" class="hud-value">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="messageBar">
+            <div id="messageTitle">Pick a card</div>
+            <div id="messageBody">
+              Try to build a run, then bank before you bust.
+            </div>
+          </div>
+
+          <div id="cardArea">
+            <button id="cardLeft" class="card" aria-label="Choose left card">
+              <div class="card-inner">
+                <div class="card-face card-back"></div>
+                <div class="card-face card-front"></div>
+                <div class="card-glow"></div>
+              </div>
+            </button>
+
+            <button id="cardRight" class="card" aria-label="Choose right card">
+              <div class="card-inner">
+                <div class="card-face card-back"></div>
+                <div class="card-face card-front"></div>
+                <div class="card-glow"></div>
+              </div>
+            </button>
+          </div>
+
+          <div id="controls">
+            <button id="btnBank" class="btn" disabled>Bank</button>
+            <button id="btnRestart" class="btn secondary">Restart</button>
+          </div>
+
+          <div id="gameOver" class="overlay hidden">
+            <div class="modal">
+              <h2 id="gameOverTitle">Game Over</h2>
+              <p id="gameOverSummary">Final score: 0</p>
+              <div class="modal-actions">
+                <button id="btnPlayAgain" class="btn">Play again</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

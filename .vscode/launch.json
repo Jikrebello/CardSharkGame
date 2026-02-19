@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Firefox (webpack-dev-server)",
+            "type": "firefox",
+            "request": "launch",
+            "url": "http://localhost:10001",
+            "webRoot": "${workspaceFolder}",
+            "reAttach": true,
+            "preLaunchTask": "webpack-dev-server"
+        }
+    ]
+}

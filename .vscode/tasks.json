@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "webpack-dev-server",
+            "type": "npm",
+            "script": "buildlocaldev",
+            "isBackground": true,
+            "problemMatcher": {
+                "base": "$tsc-watch",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Starting.*development server|webpack.*(compile|compiling)",
+                    "endsPattern": "compiled successfully|Project is running at|Loopback:|Local:"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        }
+    ]
+}
