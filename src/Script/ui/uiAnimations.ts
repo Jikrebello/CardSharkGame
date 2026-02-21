@@ -22,7 +22,7 @@ export function createAnimations(
       dom.cardRight.classList.add("disabled");
       dom.cardLeft.disabled = true;
       dom.cardRight.disabled = true;
-      dom.btnBank.disabled = true; // render() may re-enable later
+      dom.btnBank.disabled = true;
       return;
     }
 

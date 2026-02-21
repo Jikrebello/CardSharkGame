@@ -83,9 +83,7 @@ class TrophySystem {
           volume: 0.6,
         },
       );
-    } catch {
-      // non-fatal
-    }
+    } catch {}
 
     if (!this.loadPromise) {
       this.loadPromise = this.loadTrophy(this.scene).catch((err) => {

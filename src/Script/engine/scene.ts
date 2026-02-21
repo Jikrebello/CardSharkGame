@@ -11,7 +11,6 @@ export function createEngineScene(): IEngineScene {
   const engine = new BABYLON.Engine(canvas, true, {}, true);
   const scene = new BABYLON.Scene(engine);
 
-  // Background color
   scene.clearColor = new BABYLON.Color4(0.44, 0.61, 0.58, 1);
 
   const light = new BABYLON.DirectionalLight(

@@ -29,17 +29,14 @@ export function createRenderer(dom: IGameUIDomElements): IGameUIRenderer {
   function showGameOver(reason: GameOverReason, state: IRunState) {
     const tier = trophyTier(state.totalScore);
 
-    // De-emphasize active gameplay screen under the end screen
     dom.gameScreen.classList.add("is-deemphasized");
 
-    // Populate end screen copy
     dom.endTitle.textContent =
       reason === "TURNS" ? "Out of turns" : "Out of lives";
     dom.endSummary.textContent = `Final score: ${state.totalScore}`;
     dom.endScoreValue.textContent = String(state.totalScore);
     dom.endTrophyValue.textContent = tier;
 
-    // Tier badge
     dom.endTierBadge.classList.remove(
       "tier-none",
       "tier-bronze",
