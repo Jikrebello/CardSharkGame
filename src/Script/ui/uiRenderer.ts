@@ -1,29 +1,69 @@
 import { trophyTier } from "../domain/data/data.funcs";
 import {
-  IGameUI_DOM_Elements,
+  IGameUIDomElements,
   IGameUIRenderer,
   IRunState,
 } from "../domain/data/data.interfaces";
 import { GameOverReason } from "../domain/data/data.types";
 import { canBank } from "../domain/gameStateTransitions";
+import {
+  hideTrophyAward,
+  showTrophyAward,
+} from "../engine/trophy/trophySystem";
 
-export function createRenderer(dom: IGameUI_DOM_Elements): IGameUIRenderer {
+export function createRenderer(dom: IGameUIDomElements): IGameUIRenderer {
   function setMessage(title: string, body?: string) {
     dom.messageTitle.textContent = title;
     if (body !== undefined) dom.messageBody.textContent = body;
   }
 
   function hideGameOver() {
-    dom.gameOver.classList.add("hidden");
+    dom.endScreen.classList.add("hidden");
+    dom.endScreen.setAttribute("aria-hidden", "true");
+
+    dom.gameScreen.classList.remove("is-deemphasized");
+
+    hideTrophyAward();
   }
 
   function showGameOver(reason: GameOverReason, state: IRunState) {
-    dom.gameOver.classList.remove("hidden");
-
     const tier = trophyTier(state.totalScore);
-    dom.gameOverTitle.textContent =
+
+    // De-emphasize active gameplay screen under the end screen
+    dom.gameScreen.classList.add("is-deemphasized");
+
+    // Populate end screen copy
+    dom.endTitle.textContent =
       reason === "TURNS" ? "Out of turns" : "Out of lives";
-    dom.gameOverSummary.textContent = `Final score: ${state.totalScore} • Trophy: ${tier}`;
+    dom.endSummary.textContent = `Final score: ${state.totalScore}`;
+    dom.endScoreValue.textContent = String(state.totalScore);
+    dom.endTrophyValue.textContent = tier;
+
+    // Tier badge
+    dom.endTierBadge.classList.remove(
+      "tier-none",
+      "tier-bronze",
+      "tier-silver",
+      "tier-gold",
+    );
+
+    const tierClass =
+      tier === "GOLD"
+        ? "tier-gold"
+        : tier === "SILVER"
+          ? "tier-silver"
+          : tier === "BRONZE"
+            ? "tier-bronze"
+            : "tier-none";
+
+    dom.endTierBadge.classList.add(tierClass);
+    dom.endTierBadge.textContent =
+      tier === "NONE" ? "No Trophy" : `${tier} Trophy`;
+
+    dom.endScreen.classList.remove("hidden");
+    dom.endScreen.setAttribute("aria-hidden", "false");
+
+    void showTrophyAward(tier);
   }
 
   function render(state: IRunState, opts?: { inputLocked?: boolean }) {

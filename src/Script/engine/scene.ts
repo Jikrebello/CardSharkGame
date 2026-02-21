@@ -16,13 +16,17 @@ export function createEngineScene(): IEngineScene {
 
   const light = new BABYLON.DirectionalLight(
     "Light",
-    new BABYLON.Vector3(
-      BABYLON.Tools.ToRadians(-45),
-      BABYLON.Tools.ToRadians(-45),
-      0,
-    ),
+    new BABYLON.Vector3(-0.4, -1, -0.3),
     scene,
   );
+  light.intensity = 1.4;
+
+  const hemisphericLight = new BABYLON.HemisphericLight(
+    "hemisphericLight",
+    new BABYLON.Vector3(0, 1, 0),
+    scene,
+  );
+  hemisphericLight.intensity = 0.45;
 
   const camera = new BABYLON.ArcRotateCamera(
     "MainCamera",

@@ -14,7 +14,7 @@
     <div id="gameContainer">
       <canvas id="canvas" touch-action="none"></canvas>
       <div id="ui">
-        <div id="gameScreen" class="screen">
+        <div id="gameScreen" class="screen gameplay-screen">
           <div id="hud">
             <div class="hud-row">
               <div class="hud-item">
@@ -104,13 +104,54 @@
             <button id="btnRestart" class="btn secondary">Restart</button>
           </div>
 
-          <div id="gameOver" class="overlay hidden">
-            <div class="modal">
-              <h2 id="gameOverTitle">Game Over</h2>
-              <p id="gameOverSummary">Final score: 0</p>
-              <div class="modal-actions">
-                <button id="btnPlayAgain" class="btn">Play again</button>
-              </div>
+          <div id="endScreen" class="end-screen hidden" aria-hidden="true">
+            <div class="end-backdrop"></div>
+
+            <div id="endFxLayer" class="end-fx-layer" aria-hidden="true"></div>
+
+            <div
+              class="end-layout"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="endTitle"
+            >
+              <section
+                class="end-trophy-stage"
+                aria-label="Trophy presentation"
+              >
+                <canvas
+                  id="trophyCanvas"
+                  class="trophy-canvas"
+                  aria-hidden="true"
+                ></canvas>
+
+                <div class="trophy-stage-frame">
+                  <div id="endTierBadge" class="tier-badge tier-none">
+                    No Trophy
+                  </div>
+                </div>
+              </section>
+
+              <aside class="end-panel">
+                <p id="endKicker" class="end-kicker">Run Complete</p>
+                <h2 id="endTitle" class="end-title">Out of lives</h2>
+                <p id="endSummary" class="end-summary">Final score: 0</p>
+
+                <div class="end-stats">
+                  <div class="end-stat">
+                    <span class="label">Score</span>
+                    <span id="endScoreValue" class="value">0</span>
+                  </div>
+                  <div class="end-stat">
+                    <span class="label">Trophy</span>
+                    <span id="endTrophyValue" class="value">NONE</span>
+                  </div>
+                </div>
+
+                <div class="modal-actions">
+                  <button id="btnPlayAgain" class="btn">Play again</button>
+                </div>
+              </aside>
             </div>
           </div>
         </div>

@@ -48,3 +48,10 @@ export type TurnResult =
       totalScore: number;
       trophyTier: TrophyTier;
     };
+
+export type TrophyAssets = {
+  root: BABYLON.TransformNode;
+  meshes: BABYLON.AbstractMesh[];
+  particle?: BABYLON.ParticleSystem;
+  sparkleEmitter?: BABYLON.AbstractMesh;
+};

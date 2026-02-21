@@ -1,38 +1,45 @@
 import {
-  IGameUI_DOM_Elements,
   IGameUIBindingsController,
+  IGameUIDomElements as IGameUiDomElements,
   IUIActions,
 } from "../domain/data/data.interfaces";
 
-function el<T extends HTMLElement>(id: string): T {
+function getElementById<T extends HTMLElement>(id: string): T {
   const node = document.getElementById(id);
   if (!node) throw new Error(`Missing element #${id}`);
   return node as T;
 }
 
-export function createBindings(actions: IUIActions): IGameUIBindingsController {
-  const dom: IGameUI_DOM_Elements = {
-    hudLives: el<HTMLDivElement>("hudLives"),
-    hudTurns: el<HTMLDivElement>("hudTurns"),
-    hudStreak: el<HTMLDivElement>("hudStreak"),
-    hudTotal: el<HTMLDivElement>("hudTotalScore"),
-    hudTier: el<HTMLDivElement>("hudTrophyTier"),
-    hudShield: el<HTMLDivElement>("hudShield"),
-    hudScrambler: el<HTMLDivElement>("hudScrambler"),
-    hudJammer: el<HTMLDivElement>("hudJammer"),
+export function initializeUIBindings(
+  actions: IUIActions,
+): IGameUIBindingsController {
+  const dom: IGameUiDomElements = {
+    hudLives: getElementById<HTMLDivElement>("hudLives"),
+    hudTurns: getElementById<HTMLDivElement>("hudTurns"),
+    hudStreak: getElementById<HTMLDivElement>("hudStreak"),
+    hudTotal: getElementById<HTMLDivElement>("hudTotalScore"),
+    hudTier: getElementById<HTMLDivElement>("hudTrophyTier"),
+    hudShield: getElementById<HTMLDivElement>("hudShield"),
+    hudScrambler: getElementById<HTMLDivElement>("hudScrambler"),
+    hudJammer: getElementById<HTMLDivElement>("hudJammer"),
 
-    messageTitle: el<HTMLDivElement>("messageTitle"),
-    messageBody: el<HTMLDivElement>("messageBody"),
+    messageTitle: getElementById<HTMLDivElement>("messageTitle"),
+    messageBody: getElementById<HTMLDivElement>("messageBody"),
 
-    cardLeft: el<HTMLButtonElement>("cardLeft"),
-    cardRight: el<HTMLButtonElement>("cardRight"),
-    btnBank: el<HTMLButtonElement>("btnBank"),
-    btnRestart: el<HTMLButtonElement>("btnRestart"),
-    btnPlayAgain: el<HTMLButtonElement>("btnPlayAgain"),
+    cardLeft: getElementById<HTMLButtonElement>("cardLeft"),
+    cardRight: getElementById<HTMLButtonElement>("cardRight"),
+    btnBank: getElementById<HTMLButtonElement>("btnBank"),
+    btnRestart: getElementById<HTMLButtonElement>("btnRestart"),
+    btnPlayAgain: getElementById<HTMLButtonElement>("btnPlayAgain"),
 
-    gameOver: el<HTMLDivElement>("gameOver"),
-    gameOverTitle: el<HTMLHeadingElement>("gameOverTitle"),
-    gameOverSummary: el<HTMLParagraphElement>("gameOverSummary"),
+    gameScreen: getElementById<HTMLDivElement>("gameScreen"),
+
+    endScreen: getElementById<HTMLDivElement>("endScreen"),
+    endTitle: getElementById<HTMLHeadingElement>("endTitle"),
+    endSummary: getElementById<HTMLParagraphElement>("endSummary"),
+    endScoreValue: getElementById<HTMLElement>("endScoreValue"),
+    endTrophyValue: getElementById<HTMLElement>("endTrophyValue"),
+    endTierBadge: getElementById<HTMLDivElement>("endTierBadge"),
 
     uniqueSlots: Array.from(
       document.querySelectorAll<HTMLSpanElement>("#hudUniques .unique-slot"),

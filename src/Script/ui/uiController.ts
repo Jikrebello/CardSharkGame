@@ -1,7 +1,7 @@
 import { IRunState, IUIBindings } from "../domain/data/data.interfaces";
 import { Side } from "../domain/data/data.types";
 import { createAnimations } from "../ui/uiAnimations";
-import { createBindings } from "../ui/uiBindings";
+import { initializeUIBindings } from "../ui/uiBindings";
 import { createRenderer } from "../ui/uiRenderer";
 
 export function createUI(
@@ -10,7 +10,7 @@ export function createUI(
   onFlip: (side: Side) => void,
   onBank: () => void,
 ): IUIBindings {
-  const bindings = createBindings({
+  const bindings = initializeUIBindings({
     onRestart,
     onFlip,
     onBank,

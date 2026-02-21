@@ -1,7 +1,10 @@
 import { clamp } from "../shared/clamp";
 import { JokerType, Loot } from "./data/data.types";
 
-export function computePBomb(streak: number, jammerTurns: number): number {
+export function getBombProbability(
+  streak: number,
+  jammerTurns: number,
+): number {
   // Base 20%, +6% per streak, capped at 56%; jammer reduces by 15%
   let p = clamp(0.2 + 0.06 * streak, 0.2, 0.56);
   if (jammerTurns > 0) p = Math.max(0, p - 0.15);

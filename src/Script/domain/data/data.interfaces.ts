@@ -66,11 +66,9 @@ export interface IGameUIAnimations {
   lockInput(lock: boolean): void;
   resetCards(): void;
   revealBoth(state: IRunState, chosen: Side, chosenSlot: SlotType): void;
-  hideGameOver(): void;
-  showGameOverOverlay(): void;
 }
 
-export interface IGameUI_DOM_Elements {
+export interface IGameUIDomElements {
   // HUD
   hudLives: HTMLDivElement;
   hudTurns: HTMLDivElement;
@@ -92,10 +90,14 @@ export interface IGameUI_DOM_Elements {
   btnRestart: HTMLButtonElement;
   btnPlayAgain: HTMLButtonElement;
 
-  // Overlay
-  gameOver: HTMLDivElement;
-  gameOverTitle: HTMLHeadingElement;
-  gameOverSummary: HTMLParagraphElement;
+  // End game screen
+  gameScreen: HTMLDivElement;
+  endScreen: HTMLDivElement;
+  endTitle: HTMLHeadingElement;
+  endSummary: HTMLParagraphElement;
+  endScoreValue: HTMLElement;
+  endTrophyValue: HTMLElement;
+  endTierBadge: HTMLDivElement;
 
   // Uniques
   uniqueSlots: HTMLSpanElement[];
@@ -108,7 +110,7 @@ export interface IUIActions {
 }
 
 export interface IGameUIBindingsController {
-  dom: IGameUI_DOM_Elements;
+  dom: IGameUIDomElements;
   bind(): void;
   setInputLocked(lock: boolean): void;
   isInputLocked(): boolean;

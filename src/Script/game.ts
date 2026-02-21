@@ -3,6 +3,7 @@ import "babylonjs-loaders";
 import "../Style/ui.less";
 import { createGameLoop } from "./app/gameLoop";
 import { createEngineScene } from "./engine/scene";
+import { initTrophySystem } from "./engine/trophy/trophySystem";
 import { createUI } from "./ui/uiController";
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -11,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 const createScene = (_dev: boolean) => {
   const { scene } = createEngineScene();
+
+  initTrophySystem(scene);
 
   let loop!: ReturnType<typeof createGameLoop>;
 

@@ -1,6 +1,6 @@
 import {
-  IGameUI_DOM_Elements,
   IGameUIAnimations,
+  IGameUIDomElements,
   IRunState,
 } from "../domain/data/data.interfaces";
 import { Side, SlotType } from "../domain/data/data.types";
@@ -11,7 +11,7 @@ function applySlotClass(card: HTMLButtonElement, slot: SlotType) {
 }
 
 export function createAnimations(
-  dom: IGameUI_DOM_Elements,
+  dom: IGameUIDomElements,
   setInputLocked: (lock: boolean) => void,
 ): IGameUIAnimations {
   function lockInput(lock: boolean) {
@@ -57,19 +57,9 @@ export function createAnimations(
     chosenCard.classList.add(chosenSlot === "TREASURE" ? "win" : "lose");
   }
 
-  function hideGameOver() {
-    dom.gameOver.classList.add("hidden");
-  }
-
-  function showGameOverOverlay() {
-    dom.gameOver.classList.remove("hidden");
-  }
-
   return {
     lockInput,
     resetCards,
     revealBoth,
-    hideGameOver,
-    showGameOverOverlay,
   };
 }

@@ -1,6 +1,7 @@
 import {
   DEFAULT_MAX_TURNS,
   JAMMER_DURATION_TURNS,
+  LIVES_TOTAL,
   SCRAMBLER_MAX_CHARGES,
 } from "./data/data.consts";
 
@@ -17,11 +18,11 @@ import { IRunState } from "./data/data.interfaces";
 
 import { resolveBombFlip, resolveTreasureFlip } from "./gameResolvers";
 import { makeGameOverResult } from "./gameResultFactories";
-import { computePBomb } from "./gameRules";
+import { getBombProbability } from "./gameRules";
 
 export function newGame(maxTurns: number = DEFAULT_MAX_TURNS): IRunState {
   return {
-    lives: 3,
+    lives: LIVES_TOTAL,
     totalScore: 0,
 
     turnsLeft: maxTurns,
@@ -74,7 +75,7 @@ export function startNextTurn(state: IRunState): TurnResult {
     return makeGameOverResult(state, over.reason);
   }
 
-  const pBomb = computePBomb(state.streak, state.jammerTurns);
+  const pBomb = getBombProbability(state.streak, state.jammerTurns);
 
   if (state.jammerTurns > 0) {
     state.jammerTurns -= 1;
@@ -95,7 +96,7 @@ export function flip(state: IRunState, side: Side): TurnResult {
 
   state.turnsLeft -= 1;
 
-  const slot = getSelectedSlot(state, side);
+  const slot = getCurrentSlot(state, side);
 
   if (slot === "BOMB") {
     return resolveBombFlip(state);
@@ -164,6 +165,6 @@ export function assignSlotsForTurn(
   state.rightSlot = slots[0];
 }
 
-export function getSelectedSlot(state: IRunState, side: Side): SlotType {
+export function getCurrentSlot(state: IRunState, side: Side): SlotType {
   return side === "LEFT" ? state.leftSlot : state.rightSlot;
 }
