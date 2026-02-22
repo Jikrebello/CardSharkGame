@@ -2,7 +2,26 @@
 
 A fast, risk/reward card game built with **TypeScript**, **LESS**, and **Babylon.js**.
 
-Pick a card each turn, build a run, and decide when to **bank** your points before you bust. Push your luck too far and you lose the run (or a life). Play smart and finish with a **Bronze, Silver, or Gold trophy**.
+Pick a card each turn, build a run, and decide when to **bank** your points before you bust. Push your luck too far and you can lose your streak, or a life, or the run. 
+
+Play smart and finish with a **Bronze, Silver, or Gold trophy**.
+
+## Screenshots
+
+### Gameplay screen
+<img width="2560" height="1226" alt="image" src="https://github.com/user-attachments/assets/770dd594-a624-4282-8d3a-7f786415aaa6" />
+
+### Joker and Shark cards
+<img width="2560" height="1226" alt="image" src="https://github.com/user-attachments/assets/02aaaa63-92d2-40d9-9def-8030a5b505ab" />
+
+### Treasure reveal 
+<img width="2558" height="1223" alt="image" src="https://github.com/user-attachments/assets/c9b46a38-4348-4c66-958e-8104279bafdd" />
+
+### End screen with trophy
+<img width="1694" height="1011" alt="image" src="https://github.com/user-attachments/assets/2b2ee708-69ba-41e6-9558-5907c7d27f9e" />
+
+### Game Rules screen
+<img width="1384" height="1007" alt="image" src="https://github.com/user-attachments/assets/7a73ae09-b326-478c-b464-a9744ea7efdd" />
 
 ## Features
 
@@ -95,21 +114,4 @@ npm run buildlocaldev
 
 ---
 
-## Screenshots
-
-Add screenshots/gifs for the GitHub page here (recommended):
-
-* gameplay screen
-* card reveal state
-* end screen with trophy
-* rules modal
-<img width="2560" height="1226" alt="image" src="https://github.com/user-attachments/assets/770dd594-a624-4282-8d3a-7f786415aaa6" />
-
-<img width="2560" height="1226" alt="image" src="https://github.com/user-attachments/assets/02aaaa63-92d2-40d9-9def-8030a5b505ab" />
-
-<img width="2558" height="1223" alt="image" src="https://github.com/user-attachments/assets/c9b46a38-4348-4c66-958e-8104279bafdd" />
-
-<img width="1694" height="1011" alt="image" src="https://github.com/user-attachments/assets/2b2ee708-69ba-41e6-9558-5907c7d27f9e" />
-
-<img width="1384" height="1007" alt="image" src="https://github.com/user-attachments/assets/7a73ae09-b326-478c-b464-a9744ea7efdd" />
 
