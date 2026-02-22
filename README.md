@@ -105,13 +105,7 @@ At the end, your score determines your **Trophy Tier**:
 
 ## Running Locally
 
-Use your existing project build/dev workflow (the repo may be wired to a specific setup).
-
 ```powershell
 npm install
 npm run buildlocaldev
 ```
-
----
-
-
