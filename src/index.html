@@ -41,6 +41,19 @@
                 <div class="hud-label">Trophy</div>
                 <div id="hudTrophyTier" class="hud-value">None</div>
               </div>
+
+              <div class="hud-item hud-item-help">
+                <button
+                  id="btnRules"
+                  class="icon-btn"
+                  type="button"
+                  aria-label="Show game rules"
+                  aria-haspopup="dialog"
+                  aria-controls="rulesModal"
+                >
+                  ?
+                </button>
+              </div>
             </div>
 
             <div class="hud-row">
@@ -153,6 +166,90 @@
                 </div>
               </aside>
             </div>
+          </div>
+          <div id="rulesModal" class="rules-modal hidden" aria-hidden="true">
+            <div class="rules-backdrop"></div>
+
+            <section
+              class="rules-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="rulesTitle"
+              aria-describedby="rulesBody"
+            >
+              <div class="rules-header">
+                <h2 id="rulesTitle" class="rules-title">How to Play</h2>
+                <button
+                  id="btnRulesClose"
+                  class="icon-btn icon-btn-close"
+                  type="button"
+                  aria-label="Close rules"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div id="rulesBody" class="rules-body">
+                <p>
+                  Pick one of two cards each turn. One is safe loot, one is the
+                  shark.
+                </p>
+
+                <h3>Goal</h3>
+                <p>
+                  Build a run by collecting unique loot (1–7), then
+                  <strong>Bank</strong>
+                  before you bust. Banked points add to your total score.
+                </p>
+
+                <h3>Busting</h3>
+                <ul>
+                  <li>
+                    Hit the shark without a shield → lose a life. If you run out
+                    of all 3 lives, the run ends.
+                  </li>
+                  <li>
+                    Draw a duplicate number in the same run (without shield) →
+                    lose your streak, but not your lives.
+                  </li>
+                </ul>
+
+                <h3>Jokers</h3>
+                <ul>
+                  <li>
+                    <strong>Shield</strong>: blocks one shark or duplicate bust.
+                  </li>
+                  <li>
+                    <strong>Scrambler</strong>: rerolls a duplicate number
+                    (limited charges).
+                  </li>
+                  <li>
+                    <strong>Jammer</strong>: temporarily helps reduces the shark
+                    from appearing.
+                  </li>
+                </ul>
+
+                <h3>Turn Flow</h3>
+                <ol>
+                  <li>Pick a card</li>
+                  <li>Resolve loot / shark</li>
+                  <li>Choose to continue or Bank</li>
+                  <li>Survive to maximize score</li>
+                </ol>
+
+                <h3>Trophies</h3>
+                <p>
+                  Your final score determines your trophy tier: Bronze, Silver,
+                  or Gold.
+                </p>
+              </div>
+
+              <div class="rules-actions">
+                <button id="btnRulesCloseFooter" class="btn" type="button">
+                  Close
+                </button>
+              </div>
+            </section>
           </div>
         </div>
       </div>

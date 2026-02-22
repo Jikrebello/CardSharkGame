@@ -32,6 +32,14 @@ export function initializeUIBindings(
     btnRestart: getElementById<HTMLButtonElement>("btnRestart"),
     btnPlayAgain: getElementById<HTMLButtonElement>("btnPlayAgain"),
 
+    // NEW
+    btnRules: getElementById<HTMLButtonElement>("btnRules"),
+    rulesModal: getElementById<HTMLDivElement>("rulesModal"),
+    btnRulesClose: getElementById<HTMLButtonElement>("btnRulesClose"),
+    btnRulesCloseFooter: getElementById<HTMLButtonElement>(
+      "btnRulesCloseFooter",
+    ),
+
     gameScreen: getElementById<HTMLDivElement>("gameScreen"),
 
     endScreen: getElementById<HTMLDivElement>("endScreen"),
@@ -47,6 +55,7 @@ export function initializeUIBindings(
   };
 
   let inputLocked = false;
+  let lastFocusedBeforeRules: HTMLElement | null = null;
 
   function setInputLocked(lock: boolean) {
     inputLocked = lock;
@@ -56,28 +65,88 @@ export function initializeUIBindings(
     return inputLocked;
   }
 
+  function showRules(): void {
+    lastFocusedBeforeRules = document.activeElement as HTMLElement | null;
+    dom.rulesModal.classList.remove("hidden");
+    dom.rulesModal.setAttribute("aria-hidden", "false");
+    dom.btnRulesClose.focus();
+  }
+
+  function hideRules(): void {
+    dom.rulesModal.classList.add("hidden");
+    dom.rulesModal.setAttribute("aria-hidden", "true");
+
+    if (
+      lastFocusedBeforeRules &&
+      typeof lastFocusedBeforeRules.focus === "function"
+    ) {
+      lastFocusedBeforeRules.focus();
+    } else {
+      dom.btnRules.focus();
+    }
+  }
+
+  function isRulesOpen(): boolean {
+    return !dom.rulesModal.classList.contains("hidden");
+  }
+
   function bind() {
     dom.cardLeft.addEventListener("click", () => {
-      if (inputLocked) return;
+      if (inputLocked || isRulesOpen()) return;
       actions.onFlip("LEFT");
     });
 
     dom.cardRight.addEventListener("click", () => {
-      if (inputLocked) return;
+      if (inputLocked || isRulesOpen()) return;
       actions.onFlip("RIGHT");
     });
 
     dom.btnBank.addEventListener("click", () => {
-      if (inputLocked) return;
+      if (inputLocked || isRulesOpen()) return;
       actions.onBank();
     });
 
     dom.btnRestart.addEventListener("click", () => {
+      if (isRulesOpen()) {
+        hideRules();
+      }
       actions.onRestart();
     });
 
     dom.btnPlayAgain.addEventListener("click", () => {
       actions.onRestart();
+    });
+
+    // NEW: rules open/close
+    dom.btnRules.addEventListener("click", () => {
+      if (isRulesOpen()) {
+        hideRules();
+        return;
+      }
+      showRules();
+    });
+
+    dom.btnRulesClose.addEventListener("click", () => {
+      hideRules();
+    });
+
+    dom.btnRulesCloseFooter.addEventListener("click", () => {
+      hideRules();
+    });
+
+    // Backdrop click (delegate on modal wrapper)
+    dom.rulesModal.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("rules-backdrop")) {
+        hideRules();
+      }
+    });
+
+    // Escape closes rules modal
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isRulesOpen()) {
+        hideRules();
+      }
     });
   }
 

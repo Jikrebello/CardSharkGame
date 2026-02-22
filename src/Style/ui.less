@@ -147,13 +147,17 @@ canvas {
   flex-wrap: wrap;
 
   .unique-slot {
-    width: 28px;
+    min-width: 28px;
+    width: auto;
     height: 28px;
+    padding: 0 8px;
     border-radius: 8px;
-    display: grid;
+    display: inline-grid;
     place-items: center;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1;
+    white-space: nowrap;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(0, 0, 0, 0.18);
     color: var(--muted);
@@ -295,14 +299,6 @@ canvas {
     opacity: 1;
     box-shadow: 0 0 34px var(--bad);
   }
-}
-
-.card.treasure .card-front {
-  background-image: url("../Textures/Card/treasureCard.webp");
-}
-
-.card.bomb .card-front {
-  background-image: url("../Textures/Card/bombCard.webp");
 }
 
 #controls {
@@ -559,4 +555,193 @@ canvas {
   z-index: 1;
   display: block;
   border-radius: inherit;
+}
+
+.card.treasure .card-front {
+  background-image: url("../Textures/Card/treasureCard.webp");
+}
+
+.card.shark .card-front {
+  background-image: url("../Textures/Card/sharkCard.png");
+}
+
+.card.shield .card-front {
+  background-image: url("../Textures/Card/shieldCard.png");
+}
+
+.card.scrambler .card-front {
+  background-image: url("../Textures/Card/scramblerCard.png");
+}
+
+.card.jammer .card-front {
+  background-image: url("../Textures/Card/jammerCard.png");
+}
+
+.card.unique-1 .card-front {
+  background-image: url("../Textures/Card/redRubyCard.png");
+}
+
+.card.unique-2 .card-front {
+  background-image: url("../Textures/Card/blueDiamondCard.png");
+}
+
+.card.unique-3 .card-front {
+  background-image: url("../Textures/Card/greenEmeraldCard.png");
+}
+
+.card.unique-4 .card-front {
+  background-image: url("../Textures/Card/yellowCitrineCard.png");
+}
+
+.card.unique-5 .card-front {
+  background-image: url("../Textures/Card/ringCard.png");
+}
+
+.card.unique-6 .card-front {
+  background-image: url("../Textures/Card/crownCard.png");
+}
+
+.card.unique-7 .card-front {
+  background-image: url("../Textures/Card/goldCoinsCard.png");
+}
+
+.hud-row {
+  align-items: stretch;
+}
+
+.hud-item-help {
+  margin-left: auto; // pushes help button to far right if row layout is flex
+  display: flex;
+  align-items: stretch;
+}
+
+.icon-btn {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid rgba(120, 255, 220, 0.65);
+  outline-offset: 2px;
+}
+
+.icon-btn-close {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  font-size: 22px;
+}
+
+.rules-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 40; // below end screen if end screen is higher, or bump if needed
+  display: grid;
+  place-items: center;
+}
+
+.rules-modal.hidden {
+  display: none;
+}
+
+.rules-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 8, 14, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+.rules-panel {
+  position: relative;
+  z-index: 1;
+  width: min(720px, calc(100% - 24px));
+  max-height: min(80vh, 700px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    180deg,
+    rgba(14, 24, 30, 0.96),
+    rgba(10, 16, 22, 0.96)
+  );
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+
+.rules-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rules-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.rules-body {
+  padding: 14px 16px;
+  overflow: auto;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.45;
+
+  h3 {
+    margin: 14px 0 6px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  p {
+    margin: 0 0 10px;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 10px 18px;
+    padding: 0;
+  }
+
+  li {
+    margin: 0 0 6px;
+  }
+}
+
+.rules-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

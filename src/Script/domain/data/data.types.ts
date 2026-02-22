@@ -55,3 +55,4 @@ export type TrophyAssets = {
   particle?: BABYLON.ParticleSystem;
   sparkleEmitter?: BABYLON.AbstractMesh;
 };
+export type UniqueNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;

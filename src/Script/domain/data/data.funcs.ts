@@ -1,6 +1,16 @@
-import { TROPHY_THRESHOLDS } from "./data.consts";
+import {
+  TROPHY_THRESHOLDS,
+  UNIQUE_LABELS_LONG,
+  UNIQUE_LABELS_SHORT,
+} from "./data.consts";
 import { IRunState, IUiMessage } from "./data.interfaces";
-import { Side, SlotType, TrophyTier, TurnResult } from "./data.types";
+import {
+  Side,
+  SlotType,
+  TrophyTier,
+  TurnResult,
+  UniqueNumber,
+} from "./data.types";
 
 export function bankPoints(uniqueCount: number): number {
   switch (uniqueCount) {
@@ -74,4 +84,12 @@ export function isFlipTerminal(result: TurnResult): boolean {
     (result.kind === "TREASURE" && result.gameOver) ||
     result.kind === "GAME_OVER"
   );
+}
+
+export function getUniqueLabel(
+  value: number,
+  variant: "short" | "long" = "short",
+): string {
+  const labels = variant === "long" ? UNIQUE_LABELS_LONG : UNIQUE_LABELS_SHORT;
+  return labels[value as UniqueNumber] ?? String(value);
 }

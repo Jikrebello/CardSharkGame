@@ -1,4 +1,4 @@
-import { GameOverReason, Side, SlotType } from "./data.types";
+import { GameOverReason, Side, SlotType, TurnResult } from "./data.types";
 
 export interface IRunState {
   lives: number;
@@ -47,7 +47,12 @@ export interface IUIBindings {
   render(state: IRunState): void;
   setMessage(title: string, body?: string): void;
   lockInput(lock: boolean): void;
-  revealBoth(state: IRunState, chosen: Side, chosenSlot: SlotType): void;
+  revealBoth(
+    state: IRunState,
+    chosen: Side,
+    chosenSlot: SlotType,
+    result: TurnResult,
+  ): void;
   resetCards(): void;
   showGameOver(reason: GameOverReason, state: IRunState): void;
   hideGameOver(): void;
@@ -65,7 +70,12 @@ export interface IEngineScene {
 export interface IGameUIAnimations {
   lockInput(lock: boolean): void;
   resetCards(): void;
-  revealBoth(state: IRunState, chosen: Side, chosenSlot: SlotType): void;
+  revealBoth(
+    state: IRunState,
+    chosen: Side,
+    chosenSlot: SlotType,
+    result: TurnResult,
+  ): void;
 }
 
 export interface IGameUIDomElements {
@@ -101,6 +111,12 @@ export interface IGameUIDomElements {
 
   // Uniques
   uniqueSlots: HTMLSpanElement[];
+
+  // Rules model
+  btnRules: HTMLButtonElement;
+  rulesModal: HTMLDivElement;
+  btnRulesClose: HTMLButtonElement;
+  btnRulesCloseFooter: HTMLButtonElement;
 }
 
 export interface IUIActions {

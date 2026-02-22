@@ -1,4 +1,4 @@
-import { trophyTier } from "../domain/data/data.funcs";
+import { getUniqueLabel, trophyTier } from "../domain/data/data.funcs";
 import {
   IGameUIDomElements,
   IGameUIRenderer,
@@ -76,7 +76,19 @@ export function createRenderer(dom: IGameUIDomElements): IGameUIRenderer {
 
     for (const slot of dom.uniqueSlots) {
       const n = Number(slot.dataset.n);
-      slot.classList.toggle("filled", state.uniques.has(n));
+      const isFilled = state.uniques.has(n);
+
+      slot.classList.toggle("filled", isFilled);
+
+      slot.textContent = getUniqueLabel(n, "short");
+
+      slot.setAttribute(
+        "aria-label",
+        isFilled
+          ? `${getUniqueLabel(n, "long")} collected`
+          : `${getUniqueLabel(n, "long")} not collected`,
+      );
+      slot.title = getUniqueLabel(n, "long");
     }
 
     const inputLocked = !!opts?.inputLocked;

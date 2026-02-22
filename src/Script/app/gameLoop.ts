@@ -17,10 +17,19 @@ import * as GameStateManager from "../domain/gameStateTransitions";
 class GameLoop implements IGameLoop {
   private state: IRunState;
   private readonly ui: IUIBindings;
+  private cardClickSfx: HTMLAudioElement | null = null;
 
   constructor(ui: IUIBindings) {
     this.ui = ui;
     this.state = GameStateManager.newGame();
+
+    try {
+      this.cardClickSfx = new Audio("./Audio/SFX/Click-96-k.aac");
+      this.cardClickSfx.preload = "auto";
+      this.cardClickSfx.volume = 0.6;
+    } catch {
+      this.cardClickSfx = null;
+    }
   }
 
   public getState(): IRunState {
@@ -59,11 +68,11 @@ class GameLoop implements IGameLoop {
 
   public handleFlip(side: Side): void {
     this.ui.lockInput(true);
-
+    this.playCardClickSfx();
     const chosenSlot = getChosenSlot(this.state, side);
     const result = GameStateManager.flip(this.state, side);
 
-    this.revealFlip(side, chosenSlot);
+    this.revealFlip(side, chosenSlot, result);
     this.ui.render(this.state);
 
     const message = getFlipMessage(result);
@@ -82,8 +91,12 @@ class GameLoop implements IGameLoop {
     this.ui.resetCards();
   }
 
-  private revealFlip(side: Side, chosenSlot: IRunState["leftSlot"]): void {
-    this.ui.revealBoth(this.state, side, chosenSlot);
+  private revealFlip(
+    side: Side,
+    chosenSlot: IRunState["leftSlot"],
+    result: TurnResult,
+  ): void {
+    this.ui.revealBoth(this.state, side, chosenSlot, result);
   }
 
   private finishFlip(result: TurnResult): void {
@@ -113,6 +126,15 @@ class GameLoop implements IGameLoop {
     }
 
     this.ui.render(this.state);
+  }
+
+  private playCardClickSfx(): void {
+    if (!this.cardClickSfx) return;
+
+    try {
+      this.cardClickSfx.currentTime = 0;
+      void this.cardClickSfx.play();
+    } catch {}
   }
 }
 
