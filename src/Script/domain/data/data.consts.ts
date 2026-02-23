@@ -1,11 +1,4 @@
-import { TrophyTier, UniqueNumber } from "./data.types";
-
-export const SCRAMBLER_MAX_CHARGES = 4;
-export const JAMMER_DURATION_TURNS = 3;
-
-export const LIVES_TOTAL = 3;
-
-export const DEFAULT_MAX_TURNS = 40;
+import { TrophyTier } from "./data.types";
 
 export const FLIP_REVEAL_TIME = 1000;
 
@@ -26,24 +19,4 @@ export const TEXTURE_PATHS: Record<Exclude<TrophyTier, "NONE">, string> = {
   BRONZE: "./Textures/Trophy/trophy_bronze.webp",
   SILVER: "./Textures/Trophy/trophy_silver.webp",
   GOLD: "./Textures/Trophy/trophy_gold.webp",
-};
-
-export const UNIQUE_LABELS_SHORT: Record<UniqueNumber, string> = {
-  1: "Ruby",
-  2: "Diamond",
-  3: "Emerald",
-  4: "Citrine",
-  5: "Ring",
-  6: "Crown",
-  7: "Coins",
-};
-
-export const UNIQUE_LABELS_LONG: Record<UniqueNumber, string> = {
-  1: "Ruby",
-  2: "Diamond",
-  3: "Emerald",
-  4: "Citrine",
-  5: "Ring",
-  6: "Crown",
-  7: "Gold Coins",
 };

@@ -1,33 +1,44 @@
-import "babylonjs";
+import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
 import "../Style/ui.less";
+(window as any).BABYLON = BABYLON;
+
 import { createGameLoop } from "./app/gameLoop";
 import { createEngineScene } from "./engine/scene";
 import { initTrophySystem } from "./engine/trophy/trophySystem";
 import { createUI } from "./ui/uiController";
 
-document.addEventListener("DOMContentLoaded", function (event) {
-  createScene(true);
-});
+window.addEventListener("DOMContentLoaded", () => {
+  const engineScene = createEngineScene();
 
-const createScene = (_dev: boolean) => {
-  const { scene } = createEngineScene();
+  initTrophySystem(engineScene.scene);
 
-  initTrophySystem(scene);
-
-  let loop!: ReturnType<typeof createGameLoop>;
+  let gameLoopRef: ReturnType<typeof createGameLoop> | null = null;
 
   const ui = createUI(
-    () => loop.getState(),
-    () => loop.restartGame(),
-    (side) => loop.handleFlip(side),
-    () => loop.handleBank(),
+    () => {
+      if (!gameLoopRef) {
+        throw new Error("Game loop not initialized yet.");
+      }
+      return gameLoopRef.getState();
+    },
+    () => {
+      gameLoopRef?.restartGame();
+    },
+    (side) => {
+      gameLoopRef?.handleFlip(side);
+    },
+    () => {
+      gameLoopRef?.continueAfterWin();
+    },
   );
 
+  gameLoopRef = createGameLoop(ui);
+
   ui.init();
+  gameLoopRef.start();
 
-  loop = createGameLoop(ui);
-  loop.start();
-
-  return scene;
-};
+  window.addEventListener("beforeunload", () => {
+    engineScene.dispose();
+  });
+});

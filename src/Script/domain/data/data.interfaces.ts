@@ -1,40 +1,18 @@
-import { GameOverReason, Side, SlotType, TurnResult } from "./data.types";
+import { Side, SlotType, TurnResult } from "./data.types";
 
 export interface IRunState {
-  lives: number;
-  totalScore: number;
-  turnsLeft: number;
-  maxTurns: number;
-
   streak: number;
-  uniques: Set<number>;
-
-  hasShield: boolean;
-  scramblerCharges: number;
-  jammerTurns: number;
-
   leftSlot: SlotType;
   rightSlot: SlotType;
-
   lastEvent?: string;
 }
 
 export interface IGameLoop {
   start(): void;
   restartGame(): void;
-  handleBank(): void;
   handleFlip(side: Side): void;
+  continueAfterWin(): void;
   getState(): IRunState;
-}
-
-export interface IGameLoopContext {
-  ui: IUIBindings;
-  getState(): IRunState;
-  setState(next: IRunState): void;
-}
-
-export interface IAdvanceOptions {
-  unlockInput?: boolean;
 }
 
 export interface IUiMessage {
@@ -54,8 +32,9 @@ export interface IUIBindings {
     result: TurnResult,
   ): void;
   resetCards(): void;
-  showGameOver(reason: GameOverReason, state: IRunState): void;
-  hideGameOver(): void;
+
+  showWinTrophy?(): void;
+  hideWinTrophy?(): void;
 }
 
 export interface IEngineScene {
@@ -79,50 +58,28 @@ export interface IGameUIAnimations {
 }
 
 export interface IGameUIDomElements {
-  // HUD
-  hudLives: HTMLDivElement;
-  hudTurns: HTMLDivElement;
   hudStreak: HTMLDivElement;
-  hudTotal: HTMLDivElement;
-  hudTier: HTMLDivElement;
-  hudShield: HTMLDivElement;
-  hudScrambler: HTMLDivElement;
-  hudJammer: HTMLDivElement;
 
-  // Message
   messageTitle: HTMLDivElement;
   messageBody: HTMLDivElement;
 
-  // Cards / controls
   cardLeft: HTMLButtonElement;
   cardRight: HTMLButtonElement;
-  btnBank: HTMLButtonElement;
   btnRestart: HTMLButtonElement;
-  btnPlayAgain: HTMLButtonElement;
 
-  // End game screen
-  gameScreen: HTMLDivElement;
-  endScreen: HTMLDivElement;
-  endTitle: HTMLHeadingElement;
-  endSummary: HTMLParagraphElement;
-  endScoreValue: HTMLElement;
-  endTrophyValue: HTMLElement;
-  endTierBadge: HTMLDivElement;
+  btnRules?: HTMLButtonElement;
+  rulesModal?: HTMLDivElement;
+  btnRulesClose?: HTMLButtonElement;
+  btnRulesCloseFooter?: HTMLButtonElement;
 
-  // Uniques
-  uniqueSlots: HTMLSpanElement[];
-
-  // Rules model
-  btnRules: HTMLButtonElement;
-  rulesModal: HTMLDivElement;
-  btnRulesClose: HTMLButtonElement;
-  btnRulesCloseFooter: HTMLButtonElement;
+  endScreen?: HTMLDivElement;
+  btnPlayAgain?: HTMLButtonElement;
 }
 
 export interface IUIActions {
   onRestart: () => void;
   onFlip: (side: Side) => void;
-  onBank: () => void;
+  onContinueAfterWin: () => void;
 }
 
 export interface IGameUIBindingsController {
@@ -135,6 +92,6 @@ export interface IGameUIBindingsController {
 export interface IGameUIRenderer {
   render(state: IRunState, opts?: { inputLocked?: boolean }): void;
   setMessage(title: string, body?: string): void;
-  showGameOver(reason: GameOverReason, state: IRunState): void;
-  hideGameOver(): void;
+  showWinTrophy?(): void;
+  hideWinTrophy?(): void;
 }

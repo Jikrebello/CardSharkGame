@@ -8,12 +8,12 @@ export function createUI(
   _getState: () => IRunState,
   onRestart: () => void,
   onFlip: (side: Side) => void,
-  onBank: () => void,
+  onContinueAfterWin: () => void,
 ): IUIBindings {
   const bindings = initializeUIBindings({
     onRestart,
     onFlip,
-    onBank,
+    onContinueAfterWin,
   });
 
   const renderer = createRenderer(bindings.dom);
@@ -34,7 +34,7 @@ export function createUI(
     lockInput: animations.lockInput,
     revealBoth: animations.revealBoth,
     resetCards: animations.resetCards,
-    showGameOver: renderer.showGameOver,
-    hideGameOver: renderer.hideGameOver,
+    showWinTrophy: renderer.showWinTrophy,
+    hideWinTrophy: renderer.hideWinTrophy,
   };
 }

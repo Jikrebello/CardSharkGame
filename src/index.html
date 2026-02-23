@@ -13,33 +13,14 @@
   <body>
     <div id="gameContainer">
       <canvas id="canvas" touch-action="none"></canvas>
+
       <div id="ui">
         <div id="gameScreen" class="screen gameplay-screen">
           <div id="hud">
             <div class="hud-row">
               <div class="hud-item">
-                <div class="hud-label">Lives</div>
-                <div id="hudLives" class="hud-value">3</div>
-              </div>
-
-              <div class="hud-item">
-                <div class="hud-label">Turns</div>
-                <div id="hudTurns" class="hud-value">40</div>
-              </div>
-
-              <div class="hud-item">
                 <div class="hud-label">Streak</div>
                 <div id="hudStreak" class="hud-value">0</div>
-              </div>
-
-              <div class="hud-item">
-                <div class="hud-label">Total</div>
-                <div id="hudTotalScore" class="hud-value">0</div>
-              </div>
-
-              <div class="hud-item">
-                <div class="hud-label">Trophy</div>
-                <div id="hudTrophyTier" class="hud-value">None</div>
               </div>
 
               <div class="hud-item hud-item-help">
@@ -55,43 +36,11 @@
                 </button>
               </div>
             </div>
-
-            <div class="hud-row">
-              <div class="hud-item wide">
-                <div class="hud-label">Run Uniques (1–7)</div>
-                <div id="hudUniques" class="uniques">
-                  <span class="unique-slot" data-n="1">1</span>
-                  <span class="unique-slot" data-n="2">2</span>
-                  <span class="unique-slot" data-n="3">3</span>
-                  <span class="unique-slot" data-n="4">4</span>
-                  <span class="unique-slot" data-n="5">5</span>
-                  <span class="unique-slot" data-n="6">6</span>
-                  <span class="unique-slot" data-n="7">7</span>
-                </div>
-              </div>
-
-              <div class="hud-item">
-                <div class="hud-label">Shield</div>
-                <div id="hudShield" class="hud-value">Off</div>
-              </div>
-
-              <div class="hud-item">
-                <div class="hud-label">Scrambler</div>
-                <div id="hudScrambler" class="hud-value">0</div>
-              </div>
-
-              <div class="hud-item">
-                <div class="hud-label">Jammer</div>
-                <div id="hudJammer" class="hud-value">0</div>
-              </div>
-            </div>
           </div>
 
           <div id="messageBar">
             <div id="messageTitle">Pick a card</div>
-            <div id="messageBody">
-              Try to build a run, then bank before you bust.
-            </div>
+            <div id="messageBody">Find the treasure. Avoid the bomb.</div>
           </div>
 
           <div id="cardArea">
@@ -113,21 +62,13 @@
           </div>
 
           <div id="controls">
-            <button id="btnBank" class="btn" disabled>Bank</button>
             <button id="btnRestart" class="btn secondary">Restart</button>
           </div>
 
           <div id="endScreen" class="end-screen hidden" aria-hidden="true">
             <div class="end-backdrop"></div>
 
-            <div id="endFxLayer" class="end-fx-layer" aria-hidden="true"></div>
-
-            <div
-              class="end-layout"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="endTitle"
-            >
+            <div class="end-layout" role="dialog" aria-modal="true">
               <section
                 class="end-trophy-stage"
                 aria-label="Trophy presentation"
@@ -137,29 +78,12 @@
                   class="trophy-canvas"
                   aria-hidden="true"
                 ></canvas>
-
-                <div class="trophy-stage-frame">
-                  <div id="endTierBadge" class="tier-badge tier-none">
-                    No Trophy
-                  </div>
-                </div>
               </section>
 
               <aside class="end-panel">
-                <p id="endKicker" class="end-kicker">Run Complete</p>
-                <h2 id="endTitle" class="end-title">Out of lives</h2>
-                <p id="endSummary" class="end-summary">Final score: 0</p>
-
-                <div class="end-stats">
-                  <div class="end-stat">
-                    <span class="label">Score</span>
-                    <span id="endScoreValue" class="value">0</span>
-                  </div>
-                  <div class="end-stat">
-                    <span class="label">Trophy</span>
-                    <span id="endTrophyValue" class="value">NONE</span>
-                  </div>
-                </div>
+                <p class="end-kicker">Nice!</p>
+                <h2 class="end-title">Treasure Found</h2>
+                <p class="end-summary">You picked the correct card.</p>
 
                 <div class="modal-actions">
                   <button id="btnPlayAgain" class="btn">Play again</button>
@@ -167,6 +91,7 @@
               </aside>
             </div>
           </div>
+
           <div id="rulesModal" class="rules-modal hidden" aria-hidden="true">
             <div class="rules-backdrop"></div>
 
@@ -190,58 +115,16 @@
               </div>
 
               <div id="rulesBody" class="rules-body">
+                <p>Each turn, choose one of two cards.</p>
                 <p>
-                  Pick one of two cards each turn. One is safe loot, one is the
-                  shark.
+                  One card hides <strong>Treasure</strong>. The other hides a
+                  <strong>Bomb</strong>.
                 </p>
-
-                <h3>Goal</h3>
                 <p>
-                  Build a run by collecting unique loot (1–7), then
-                  <strong>Bank</strong>
-                  before you bust. Banked points add to your total score.
+                  Pick the treasure to increase your <strong>streak</strong>.
+                  Pick the bomb and your streak resets to 0.
                 </p>
-
-                <h3>Busting</h3>
-                <ul>
-                  <li>
-                    Hit the shark without a shield → lose a life. If you run out
-                    of all 3 lives, the run ends.
-                  </li>
-                  <li>
-                    Draw a duplicate number in the same run (without shield) →
-                    lose your streak, but not your lives.
-                  </li>
-                </ul>
-
-                <h3>Jokers</h3>
-                <ul>
-                  <li>
-                    <strong>Shield</strong>: blocks one shark or duplicate bust.
-                  </li>
-                  <li>
-                    <strong>Scrambler</strong>: rerolls a duplicate number
-                    (limited charges).
-                  </li>
-                  <li>
-                    <strong>Jammer</strong>: temporarily helps reduces the shark
-                    from appearing.
-                  </li>
-                </ul>
-
-                <h3>Turn Flow</h3>
-                <ol>
-                  <li>Pick a card</li>
-                  <li>Resolve loot / shark</li>
-                  <li>Choose to continue or Bank</li>
-                  <li>Survive to maximize score</li>
-                </ol>
-
-                <h3>Trophies</h3>
-                <p>
-                  Your final score determines your trophy tier: Bronze, Silver,
-                  or Gold.
-                </p>
+                <p>The trophy celebration appears when you win a flip.</p>
               </div>
 
               <div class="rules-actions">

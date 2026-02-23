@@ -10,48 +10,35 @@ function getElementById<T extends HTMLElement>(id: string): T {
   return node as T;
 }
 
+function getOptionalElementById<T extends HTMLElement>(
+  id: string,
+): T | undefined {
+  const node = document.getElementById(id);
+  return node ? (node as T) : undefined;
+}
+
 export function initializeUIBindings(
   actions: IUIActions,
 ): IGameUIBindingsController {
   const dom: IGameUiDomElements = {
-    hudLives: getElementById<HTMLDivElement>("hudLives"),
-    hudTurns: getElementById<HTMLDivElement>("hudTurns"),
     hudStreak: getElementById<HTMLDivElement>("hudStreak"),
-    hudTotal: getElementById<HTMLDivElement>("hudTotalScore"),
-    hudTier: getElementById<HTMLDivElement>("hudTrophyTier"),
-    hudShield: getElementById<HTMLDivElement>("hudShield"),
-    hudScrambler: getElementById<HTMLDivElement>("hudScrambler"),
-    hudJammer: getElementById<HTMLDivElement>("hudJammer"),
 
     messageTitle: getElementById<HTMLDivElement>("messageTitle"),
     messageBody: getElementById<HTMLDivElement>("messageBody"),
 
     cardLeft: getElementById<HTMLButtonElement>("cardLeft"),
     cardRight: getElementById<HTMLButtonElement>("cardRight"),
-    btnBank: getElementById<HTMLButtonElement>("btnBank"),
     btnRestart: getElementById<HTMLButtonElement>("btnRestart"),
-    btnPlayAgain: getElementById<HTMLButtonElement>("btnPlayAgain"),
 
-    // NEW
-    btnRules: getElementById<HTMLButtonElement>("btnRules"),
-    rulesModal: getElementById<HTMLDivElement>("rulesModal"),
-    btnRulesClose: getElementById<HTMLButtonElement>("btnRulesClose"),
-    btnRulesCloseFooter: getElementById<HTMLButtonElement>(
+    btnRules: getOptionalElementById<HTMLButtonElement>("btnRules"),
+    rulesModal: getOptionalElementById<HTMLDivElement>("rulesModal"),
+    btnRulesClose: getOptionalElementById<HTMLButtonElement>("btnRulesClose"),
+    btnRulesCloseFooter: getOptionalElementById<HTMLButtonElement>(
       "btnRulesCloseFooter",
     ),
 
-    gameScreen: getElementById<HTMLDivElement>("gameScreen"),
-
-    endScreen: getElementById<HTMLDivElement>("endScreen"),
-    endTitle: getElementById<HTMLHeadingElement>("endTitle"),
-    endSummary: getElementById<HTMLParagraphElement>("endSummary"),
-    endScoreValue: getElementById<HTMLElement>("endScoreValue"),
-    endTrophyValue: getElementById<HTMLElement>("endTrophyValue"),
-    endTierBadge: getElementById<HTMLDivElement>("endTierBadge"),
-
-    uniqueSlots: Array.from(
-      document.querySelectorAll<HTMLSpanElement>("#hudUniques .unique-slot"),
-    ),
+    endScreen: getOptionalElementById<HTMLDivElement>("endScreen"),
+    btnPlayAgain: getOptionalElementById<HTMLButtonElement>("btnPlayAgain"),
   };
 
   let inputLocked = false;
@@ -65,7 +52,18 @@ export function initializeUIBindings(
     return inputLocked;
   }
 
+  function isRulesWired(): boolean {
+    return !!(
+      dom.btnRules &&
+      dom.rulesModal &&
+      dom.btnRulesClose &&
+      dom.btnRulesCloseFooter
+    );
+  }
+
   function showRules(): void {
+    if (!isRulesWired() || !dom.rulesModal || !dom.btnRulesClose) return;
+
     lastFocusedBeforeRules = document.activeElement as HTMLElement | null;
     dom.rulesModal.classList.remove("hidden");
     dom.rulesModal.setAttribute("aria-hidden", "false");
@@ -73,6 +71,8 @@ export function initializeUIBindings(
   }
 
   function hideRules(): void {
+    if (!isRulesWired() || !dom.rulesModal || !dom.btnRules) return;
+
     dom.rulesModal.classList.add("hidden");
     dom.rulesModal.setAttribute("aria-hidden", "true");
 
@@ -87,7 +87,7 @@ export function initializeUIBindings(
   }
 
   function isRulesOpen(): boolean {
-    return !dom.rulesModal.classList.contains("hidden");
+    return !!dom.rulesModal && !dom.rulesModal.classList.contains("hidden");
   }
 
   function bind() {
@@ -101,48 +101,39 @@ export function initializeUIBindings(
       actions.onFlip("RIGHT");
     });
 
-    dom.btnBank.addEventListener("click", () => {
-      if (inputLocked || isRulesOpen()) return;
-      actions.onBank();
-    });
-
     dom.btnRestart.addEventListener("click", () => {
-      if (isRulesOpen()) {
-        hideRules();
-      }
+      if (isRulesOpen()) hideRules();
       actions.onRestart();
     });
 
-    dom.btnPlayAgain.addEventListener("click", () => {
-      actions.onRestart();
+    dom.btnPlayAgain?.addEventListener("click", () => {
+      actions.onContinueAfterWin();
     });
 
-    // NEW: rules open/close
-    dom.btnRules.addEventListener("click", () => {
+    // Rules modal wiring (if present)
+    dom.btnRules?.addEventListener("click", () => {
       if (isRulesOpen()) {
         hideRules();
-        return;
+      } else {
+        showRules();
       }
-      showRules();
     });
 
-    dom.btnRulesClose.addEventListener("click", () => {
+    dom.btnRulesClose?.addEventListener("click", () => {
       hideRules();
     });
 
-    dom.btnRulesCloseFooter.addEventListener("click", () => {
+    dom.btnRulesCloseFooter?.addEventListener("click", () => {
       hideRules();
     });
 
-    // Backdrop click (delegate on modal wrapper)
-    dom.rulesModal.addEventListener("click", (e) => {
+    dom.rulesModal?.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (target.classList.contains("rules-backdrop")) {
         hideRules();
       }
     });
 
-    // Escape closes rules modal
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && isRulesOpen()) {
         hideRules();
